@@ -43,12 +43,12 @@ class ChatPage extends StatelessWidget {
           Expanded(
               //FutureBuilder
               //h動機処理の結果を基にWidgetを作成
-              child: FutureBuilder<QuerySnapshot>(
+              child: StreamBuilder<QuerySnapshot>(
             //メッセージを取得する
-            future: Firestore.instance
+            stream: Firestore.instance
                 .collection('messages')
                 .orderBy('date')
-                .getDocuments(),
+                .snapshots(),
 
             builder: (context, snapshot) {
               //データが取得できた場合
