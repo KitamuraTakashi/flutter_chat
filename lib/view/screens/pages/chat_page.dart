@@ -59,10 +59,25 @@ class ChatPage extends StatelessWidget {
                 //取得した投稿メッセージを一覧に表示
                 return ListView(
                   children: documents.map((document) {
+                    IconButton deleteIcon;
+                    // 自分の投稿メッセージの場合は削除ボタンを表示
+                    if (document['email'] == user.email) {
+                      deleteIcon = IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          // 投稿メッセージのドキュメントを削除
+                          await Firestore.instance
+                              .collection('posts')
+                              .document(document.documentID)
+                              .delete();
+                        },
+                      );
+                    }
                     return Card(
                       child: ListTile(
                         title: Text(document['text'].toString()),
                         subtitle: Text(document['email'].toString()),
+                        trailing: deleteIcon,
                       ),
                     );
                   }).toList(),
